@@ -1,0 +1,19 @@
+{
+  "name": "denmark-mentions-back",
+  "version": "1.0.0",
+  "description": "",
+  "main": "facebook.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "jquery": "^3.2.1",
+    "jsdom": "^11.5.1",
+    "mongoose": "^4.13.9",
+    "node-fetch": "^1.7.3"
+  }
+}
