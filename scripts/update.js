@@ -3,7 +3,7 @@ const {fetchPostsByUserId, fetchPostsByUserIds} = require('./facebook')
 const {fetchFacebookIdsFromSB} = require('./socialBakers')
 
 /*
-Insert a feature for fullupdate in order of userids so that 
+TODO: Insert a feature for fullupdate in order of userids so that 
 first updates the userid that was updated the longest ago.
 */
 async function fullFacebookUpdate(accessToken){
@@ -21,7 +21,7 @@ async function fullFacebookUpdate(accessToken){
     console.log('currentPostIds:', curPosts.length)
   }
   console.log('Total posts:', facebookPosts.length)
-  for(let post of facebook){
+  for(let post of facebookPosts){
     console.log(post)
     break
   }
