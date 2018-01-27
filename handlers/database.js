@@ -1,7 +1,9 @@
 
 function getDBConnection() {
   const mongoose = require('mongoose')
-  mongoose.connect('mongodb://dkuser:dkpassword@ds261247.mlab.com:61247/dkmentions', {
+  const mongoLocalUrl = 'mongodb://localhost:27017'
+  const mongoMlabUrl = 'mongodb://dkuser:dkpassword@ds261247.mlab.com:61247/dkmentions'
+  mongoose.connect(mongoLocalUrl, {
     useMongoClient: true
   })
   const db = mongoose.connection

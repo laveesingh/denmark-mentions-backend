@@ -1,35 +1,34 @@
 const {getDBConnection} = require('../handlers/database')
 const {fetchPostsByUserId, fetchPostsByUserIds} = require('./facebook')
-const {fetchFacebookIdsFromSB} = require('./socialBakers')
+import {fetchFacebookIdsFromSB} from './socialBakers'
+
+const facebookAccessToken = '' // needs to be updated every 2 hour (I know, right?)
 
 /*
 TODO: Insert a feature for fullupdate in order of userids so that 
 first updates the userid that was updated the longest ago.
 */
+// takes an accessToken, fetches fetches social bakers survey, updates entire database of facebook
 async function fullFacebookUpdate(accessToken){
-  const noOfPageSB = 5 // temporary
-  const db = getDBConnection()
+  const noOfPageSB = 5 // throttled
+  // const db = getDBConnection()
   let facebookUserIdsList = await fetchFacebookIdsFromSB(noOfPageSB)
-  facebookUserIdsList = facebookUserIdsList.slice(0,2) // temporary
+  facebookUserIdsList = facebookUserIdsList.slice(0,2) // throttled
   let facebookPosts = []
 
   for(let userId of facebookUserIdsList){
     console.log('fetching for user:', userId)
     let curPosts = await fetchPostsByUserId(userId, accessToken)
-    curPosts = curPosts.slice(0, 3) // temporary
+    curPosts = curPosts.slice(0, 3) // throttled
     facebookPosts.push(...curPosts)
     console.log('currentPostIds:', curPosts.length)
   }
   console.log('Total posts:', facebookPosts.length)
-  for(let post of facebookPosts){
-    console.log(post)
-    break
-  }
+  console.log(facebookPosts)
+  // now put those posts into the database
 }
 
-fullFacebookUpdate(
-  'EAACEdEose0cBANMZBjH2g8BRYqIOyJHRP54zW7jbuaXgUPIPHyUXZBSXu8uBksscg6qZCJjbNoJZA0gZBLbyBlhVoUTlCWOwK7cKGshjntWBCsdIYi6kZAlBPbkNv6W0EZAp8RoIqZAn07mMrfOaQ7N1r0Tmz9yNpapLpHNhd7YG7lUJXQ2UAuTGhQNQwzZAaZCP4ZD'
-)
+// fullFacebookUpdate( facebookAccessToken )
 
 module.exports = {
   fullFacebookUpdate

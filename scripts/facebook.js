@@ -1,45 +1,45 @@
 var fetch = require('node-fetch')
 
-async function fetchPostsByUserId(userId, accessToken){
+// takes a userId and a valid accessToken and returs a list of Posts(including comments etc) for that user
+export async function fetchPostsByUserId(userId, accessToken){
   // let $postIds = `https://graph.facebook.com/v2.10/${userId}?fields=posts{id}&access_token=${accessToken}`
-  let $postIds = `https://graph.facebook.com/v2.10/${userId}/posts?fields=comments{id},id&access_token=${accessToken}`
-  let curPostIds = []
+  let $Posts = `https://graph.facebook.com/v2.10/${userId}/posts?fields=comments{id},id&access_token=${accessToken}`
+  let curPosts = []
   let response = ''
   let jsonResponse = ''
   do{
-    // console.log('.')
     process.stdout.write('.')
-    response = await fetch($postIds)
+    response = await fetch($Posts)
     jsonResponse = await response.json()
+    curPosts.push(...jsonResponse.data)
     if(jsonResponse.posts){
-      console.log('never come in here')
-      for(let post of jsonResponse.posts.data){
-        curPostIds.push(post.id)
-      }
-    }else{
-      for (let post of jsonResponse.data){
-        curPostIds.push(post.id)
-      }
-    }
-    if(jsonResponse.posts){
-      $postIds = jsonResponse.posts.paging.next
+      $Posts = jsonResponse.posts.paging.next
     } else {
-      $postIds = jsonResponse.paging.next
+      $Posts = jsonResponse.paging.next
     }
-  }while($postIds);
-  return curPostIds
+  }while($Posts);
+  putPosts(curPosts) // put entire array into the database
+  return curPosts
 }
 
-async function fetchPostsByUserIds(userIdsList, accessToken){
-  let allPostsIds = []
+// takes a list of UserIds and a valid accessToken and returs a list of Posts(including comments etc) for those users
+export async function fetchPostsByUserIds(userIdsList, accessToken){
+  let allPosts = []
   for(let userId of userIdsList) {
-    let curPostIds = await fetchPostsByUserId(userId, accessToken)
-    allPostsIds = [...allPostsIds, ...curPostIds]
+    let curPosts = await fetchPostsByUserId(userId, accessToken)
+    allPosts = [...allPosts, ...curPosts]
   }
-  return allPostsIds
+  return allPosts
 }
 
-module.exports = {
-  fetchPostsByUserId,
-  fetchPostsByUserIds
+function putPosts(postObjects){
+  postObjects.forEach(post => {
+    putPost(post)
+  })
+}
+
+// take a post object that also contains comments
+// and put this post and comments into the database
+function putPost(postObject){
+  console.log("post object:", postObject)
 }
