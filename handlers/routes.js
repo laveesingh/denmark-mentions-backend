@@ -1,6 +1,7 @@
+import fs from 'fs'
 import {writeFacebookSurveyToFile} from '../scripts/socialBakers'
 import {fetchPostsByUserIds, fetchPostsByUserId} from '../scripts/facebook'
-import fs from 'fs'
+import { FacebookComment, FacebookPost } from '../models/models'
 
 
 export function router(app) {
@@ -26,5 +27,25 @@ export function router(app) {
     const facebookUserIds = JSON.parse(fs.readFileSync(facebookArchiveFilename))
     console.log(`facebookUserIds: ${facebookUserIds}`)
     fetchPostsByUserIds(facebookUserIds, facebookAccessToken)
+  })
+
+  app.get('/search/fbposts', function(request, response) {
+    FacebookPost.find({}, (error, result) => {
+      if (error) {
+        response.json({ error: error })
+      } else {
+        response.json({ result: result })
+      }
+    })
+  })
+
+  app.get('/search/fbcomments', (request, response) => {
+    FacebookComment.find({}, (error, result) => {
+      if (error) {
+        response.json({ error: error })
+      } else {
+        response.json({ result: result })
+      }
+    })
   })
 }
