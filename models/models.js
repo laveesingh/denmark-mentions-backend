@@ -2,10 +2,10 @@ import mongoose from 'mongoose'
 const Schema = mongoose.Schema
 
 const facebookCommentSchema = new Schema({
-  id: string,
-  from: string,
-  message: string,
-  like_count: string,
+  id: String,
+  from: String,
+  message: String,
+  // like_count: String,
   created_time: Date
 })
 export const FacebookComment = mongoose.model(
@@ -13,11 +13,11 @@ export const FacebookComment = mongoose.model(
   facebookCommentSchema
 )
 
-const facebookPostScheme = new Schema({
-  id: string,
-  from: string,
-  message: string,
-  like_count: string,
+const facebookPostSchema = new Schema({
+  id: String,
+  from: String,
+  message: String,
+  // like_count: String,
   created_time: Date
 })
 export const FacebookPost = mongoose.model(
