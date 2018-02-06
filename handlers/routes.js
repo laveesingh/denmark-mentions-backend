@@ -22,8 +22,9 @@ export function router(app) {
     if (scrapeSurvey) {
       await writeFacebookSurveyToFile({noOfPages: 3})
     }
-    const facebookArchiveFilename = 
-    const facebookUserIds = JSON.parse(fs.readFileSync())
+    const facebookArchiveFilename = path.resolve(__dirname, '..', 'archives', 'facebookArchive.json')
+    const facebookUserIds = JSON.parse(fs.readFileSync(facebookArchiveFilename))
+    console.log(`facebookUserIds: ${facebookUserIds}`)
     fetchPostsByUserIds(facebookUserIds, facebookAccessToken)
   })
 }
